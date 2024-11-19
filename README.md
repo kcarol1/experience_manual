@@ -890,6 +890,8 @@ mv file1.txt file2.txt file3.txt /home/user/documents/
    ```
    这条命令会启动你的脚本并把标准输出和错误输出都重定向到 `output.log` 文件，同时 `&` 会让程序在后台运行。
 
+   如果只运行`python your_script.py > output.log 2>&1 &`，它也会在后台运行，但是与当前终端绑定，当终端关闭时，程序也会结束运行
+   
    > 在命令 `nohup python your_script.py > /path/to/your/directory/output.log 2>&1 &` 中，`1` 和 `2` 分别代表不同的输出流：
    >
    > - `1` 是标准输出（stdout），它通常用来输出程序运行的结果或数据。
