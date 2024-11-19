@@ -1314,12 +1314,12 @@ Host s5808
   HostName 00.0000.000.000
   Port 6000
   User yang.liu
-  IdentityFile "C:\Users\13377\.ssh\id_rsa"
+  IdentityFile "C:\Users\你的用户名\.ssh\id_rsa"
 
 Host s5804
-  HostName 172.26.66.118
+  HostName 172.99.99.99
   User luxi.xiao
-  IdentityFile "C:\Users\13377\.ssh\id_rsa"
+  IdentityFile "C:\Users\你的用户名\.ssh\id_rsa"
   ProxyCommand C:\Windows\System32\OpenSSH\ssh.exe -W %h:%p -q s5808
  # Mac的跳板连接
   roxyCommand ssh -W %h:%p -q s5808
@@ -1329,12 +1329,12 @@ Host s5804
 
 ```
 Host pgy_5804
-  HostName 172.16.0.152
+  HostName 172.77.77.77
   User luxi.xiao
-  IdentityFile "C:\Users\13377\.ssh\id_rsa"
+  IdentityFile "C:\Users\你的用户名\.ssh\id_rsa"
 ```
 
-这是直接连接，`IdentityFile "C:\Users\13377\.ssh\id_rsa"`是密钥，这部分可以查阅[ssh免密登录](#如何设置ssh免密登录)
+这是直接连接，`IdentityFile "C:\Users\你的用户名\.ssh\id_rsa"`是密钥，这部分可以查阅[ssh免密登录](#如何设置ssh免密登录)
 
 ## 重置服务器端的设置
 
