@@ -151,3 +151,57 @@ git add . && git commit -m "update" && git push origin main
 
 这些操作都要在项目的文件夹下进行
 
+# 上传大文件
+
+1. **使用 Git LFS (Large File Storage)**  
+   - 安装 Git LFS：[Git LFS 官方下载地址](https://git-lfs.github.com/)
+   - 初始化 Git LFS：  
+     ```bash
+     git lfs install
+     ```
+   - 跟踪大文件类型：  
+     ```bash
+     git lfs track "*.mat"
+     ```
+     这会告诉 Git LFS 管理所有 `.mat` 文件。
+   - 添加 LFS 配置到版本控制：  
+     ```bash
+     git add .gitattributes
+     ```
+   - 重新添加超大的文件并提交：  
+     ```bash
+     git add Houston/HoustonHSI.mat
+     git commit -m "Track large file with Git LFS"
+     ```
+   - 然后尝试推送：
+     ```bash
+     git push origin main
+     ```
+
+2. **上传文件到其他存储服务**  
+   如果不想使用 Git LFS，可以考虑将超大的文件上传到其他文件存储服务，比如 Google Drive、OneDrive 或 Dropbox。然后在项目 README 中添加一个链接，注明文件的下载地址。
+
+3. **压缩文件**  
+   如果文件是可压缩的（如图片或文本），尝试对文件进行压缩，以使其大小低于 100 MB。例如：
+   ```bash
+   zip HoustonHSI.zip Houston/HoustonHSI.mat
+   ```
+   然后提交压缩后的文件。
+
+4. **分割文件**  
+   如果文件不能压缩，你可以尝试将其分割为多个小文件，并在代码中实现分段加载。使用工具 `split`：
+   ```bash
+   split -b 100M Houston/HoustonHSI.mat part_
+   ```
+   然后将生成的分割文件提交到 GitHub。
+
+### 注意事项
+如果你已经提交了超大文件并被拒绝推送，需要从历史记录中移除它，以防仓库的 `.git` 目录变得过于庞大：
+```bash
+git rm --cached Houston/HoustonHSI.mat
+git commit -m "Remove large file from history"
+```
+
+通过上述方法之一，你应该能够顺利解决问题。
+
+如果仓库还尚未形成，可以删除`.git`文件，再用`git init`初始化，接着再
