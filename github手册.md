@@ -149,4 +149,5 @@ git add .(推送内容) && git commit -m "描述您的更改" && git push origin
 git add . && git commit -m "update" && git push origin main
 ```
 
-这些操作都要下项目的文件夹下进行
+这些操作都要在项目的文件夹下进行
+
