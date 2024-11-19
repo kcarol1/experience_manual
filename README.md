@@ -154,9 +154,9 @@
 
 **文件**
 
-`scp username@ip_address:/home/username/filename`
+`scp username@ip_address:/home/username/filename 本地目录`
 
-`rsync username@ip_address:/home/username/filename`
+`rsync username@ip_address:/home/username/filename 本地目录`
 
 **目录**
 
