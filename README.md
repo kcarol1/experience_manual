@@ -350,6 +350,94 @@ man gunzip
 
 `conda info --envs`
 
+## conda换源
+
+### 添加源
+
+如果使用 `conda create -n wcra` 命令时速度很慢，可以尝试以下几种方法加速：
+
+#### 1. 更换镜像源
+
+使用国内镜像源可以显著提高下载速度。以下是一些常用的镜像源：
+
+- 清华大学
+
+```bash
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --set show_channel_urls yes
+```
+
+- 中科大
+
+```bash
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+conda config --set show_channel_urls yes
+```
+
+> 最好只保留更换的镜像源，不要其他的，不然还是很慢
+
+#### 2. 使用 mamba
+
+`mamba` 是一个更快的包管理器，兼容 `conda`。安装 `mamba` 后，可以用它来创建环境和安装包：
+
+```bash
+conda install mamba -n base -c conda-forge
+mamba create -n wcra
+```
+
+#### 3. 离线安装
+
+如果你有其他机器上已经安装好的环境，可以使用 `conda-pack` 打包，然后在目标机器上解压。
+
+#### 4. 更新 conda
+
+确保你使用的是最新版本的 `conda`，可以使用以下命令更新：
+
+```bash
+conda update conda
+```
+
+尝试这些方法，应该能改善速度问题。
+
+### 临时换源
+
+如果你只想临时更换 `conda` 的源，可以在创建环境时指定 `-c` 选项来使用特定的镜像。比如：
+
+#### 清华大学镜像
+
+```bash
+conda create -n wcra -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ package_name
+```
+
+#### 中科大镜像
+
+```bash
+conda create -n wcra -c https://mirrors.ustc.edu.cn/anaconda/pkgs/main/ package_name
+```
+
+在这里，`package_name` 是你要安装的具体包的名称。如果不想指定包，可以先创建环境，然后再安装包：
+
+```bash
+conda create -n wcra python
+conda install -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ package_name
+```
+
+这样，你可以在完成安装后恢复到默认源。
+
+#### 创建环境临时换源
+
+如果创建环境时速度太慢，临时更换源可以使用 `--override-channels` 选项，直接在命令中指定要使用的源，而忽略默认源。这样可以加快环境创建的速度。
+
+例如，使用清华大学的镜像：
+
+```bash
+conda create -n wcra --override-channels -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/ python
+```
+
+这样创建环境时就会使用指定的源，应该会更快。
+
 # 能ping通但不能ssh连接
 
 **可能是ubuntu没有开启ssh服务**
@@ -1981,86 +2069,7 @@ nano myfile.txt
 
 这些方法都可以用于创建新文件，你可以选择适合自己的方式。
 
-# conda换源
 
-## 添加源
-
-如果使用 `conda create -n wcra` 命令时速度很慢，可以尝试以下几种方法加速：
-
-### 1. 更换镜像源
-使用国内镜像源可以显著提高下载速度。以下是一些常用的镜像源：
-
-- 清华大学
-```bash
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-conda config --set show_channel_urls yes
-```
-
-- 中科大
-```bash
-conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
-conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
-conda config --set show_channel_urls yes
-```
-
-> 最好只保留更换的镜像源，不要其他的，不然还是很慢
-
-### 2. 使用 mamba
-
-`mamba` 是一个更快的包管理器，兼容 `conda`。安装 `mamba` 后，可以用它来创建环境和安装包：
-
-```bash
-conda install mamba -n base -c conda-forge
-mamba create -n wcra
-```
-
-### 3. 离线安装
-如果你有其他机器上已经安装好的环境，可以使用 `conda-pack` 打包，然后在目标机器上解压。
-
-### 4. 更新 conda
-确保你使用的是最新版本的 `conda`，可以使用以下命令更新：
-
-```bash
-conda update conda
-```
-
-尝试这些方法，应该能改善速度问题。
-
-## 临时换源
-
-如果你只想临时更换 `conda` 的源，可以在创建环境时指定 `-c` 选项来使用特定的镜像。比如：
-
-### 清华大学镜像
-```bash
-conda create -n wcra -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ package_name
-```
-
-### 中科大镜像
-```bash
-conda create -n wcra -c https://mirrors.ustc.edu.cn/anaconda/pkgs/main/ package_name
-```
-
-在这里，`package_name` 是你要安装的具体包的名称。如果不想指定包，可以先创建环境，然后再安装包：
-
-```bash
-conda create -n wcra python
-conda install -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ package_name
-```
-
-这样，你可以在完成安装后恢复到默认源。
-
-### 创建环境临时换源
-
-如果创建环境时速度太慢，临时更换源可以使用 `--override-channels` 选项，直接在命令中指定要使用的源，而忽略默认源。这样可以加快环境创建的速度。
-
-例如，使用清华大学的镜像：
-
-```bash
-conda create -n wcra --override-channels -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/ -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/ python
-```
-
-这样创建环境时就会使用指定的源，应该会更快。
 
 # 多个视频合成一个
 
