@@ -140,3 +140,13 @@ git fetch origin && git reset --hard origin/分支名 && git clean -fd
    ```
 
 完成后，本地分支将完全与远程分支同步，完全丢弃本地修改。
+
+# 用命令行进行本地一键推送
+
+```bash
+git add .(推送内容) && git commit -m "描述您的更改" && git push origin main(远程分支名称)
+# 示例
+git add . && git commit -m "update" && git push origin main
+```
+
+这些操作都要下项目的文件夹下进行

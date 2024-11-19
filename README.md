@@ -2004,7 +2004,10 @@ conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
 conda config --set show_channel_urls yes
 ```
 
+> 最好只保留更换的镜像源，不要其他的，不然还是很慢
+
 ### 2. 使用 mamba
+
 `mamba` 是一个更快的包管理器，兼容 `conda`。安装 `mamba` 后，可以用它来创建环境和安装包：
 
 ```bash
