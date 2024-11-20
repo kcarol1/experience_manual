@@ -204,4 +204,19 @@ git commit -m "Remove large file from history"
 
 通过上述方法之一，你应该能够顺利解决问题。
 
-如果仓库还尚未形成，可以删除`.git`文件，再用`git init`初始化，接着再
+如果仓库还尚未形成，可以删除`.git`文件，再用`git init`初始化，接着再进行上面的操作
+
+# 当远程创建了一个新的分支，而本地还没有更新
+
+检查远程分支，注意要先更新分支列表才会检测到新分支
+
+```bash
+git branch -r
+```
+
+更新远程分支列表
+
+```bash
+git fetch origin
+```
+
