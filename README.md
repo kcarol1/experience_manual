@@ -878,7 +878,7 @@ nano <文件路径>
    ssh-keygen -t ed25519 -f ~/.ssh/custom_key_name # 这里如无必要，名称建议为 id_ed2519，如果自定义名称就需要在config里写一些配置
    ```
    
-   config在`.ssh`文件夹下，如何配置其中的内容可以参考[vscode远程连接的配置内容](# vscode远程连接)
+   config在`.ssh`文件夹下，如何配置其中的内容你可以参考[vscode远程连接的配置内容](# vscode远程连接)
    
    - **注意**：创建密钥的算法[`ed25519`和`RSA(4096)`](# `ed25519`和`RSA(4096)`)有所区别
    
