@@ -227,10 +227,49 @@ unzip file.zip -d /path/to/destination
 2. **解压`.tar.gz`文件到指定目录**：
 
 ```bash
-tar -xzf file.tar.gz -C /path/to/destination
+tar -xzf file.tar.gz -C /path/to/destination # C是大写
 ```
 
 这将把`file.tar.gz`解压到`/path/to/destination`目录中。
+
+```bash
+tar -xzvf vim.tar.gz
+```
+
+`x`: 表示解压文件。
+
+`z`: 表示解压的是一个 `.gz` 文件。
+
+`v`: 表示显示详细信息。
+
+`f`: 表示操作的文件名。
+
+如果你需要更详细的进度输出，可以用 `--checkpoint` 参数。例如：
+
+```bash
+tar --checkpoint=100 -xzf vim.tar.gz
+```
+
+解释：
+
+- `--checkpoint=100`: 每解压 100 个文件会输出一条进度信息。
+
+这对于解压包含大量文件的压缩包非常有用。
+
+也可以通过配合其他工具（如 `pv` 或 `progress`）显示更加直观的进度条。以下是使用 `pv` 的方法：
+
+1. 确保安装 `pv` 工具（若未安装，可以通过 `apt install pv` 安装）。
+
+2. 使用如下命令：
+
+   ```
+   pv vim.tar.gz | tar -xzvf -
+   ```
+
+   - `pv`: 会显示解压过程中的数据流量。
+   - `|`: 管道符，将数据传递给 `tar`。
+
+运行后，你会看到一个实时更新的进度条。
 
 3. **解压`.tar.bz2`文件到指定目录**：
 
