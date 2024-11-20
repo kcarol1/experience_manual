@@ -502,7 +502,7 @@ tar -xzf my_env.tar.gz -C ~/my_env
 解压后，您的环境会存放在 `<target_directory>` 中。
 
 **\- 推荐步骤**
-> 直接进入到环境目录，以我的为例：
+> 直接进入到环境目录，以我的为例：  
 我的环境在`~/miniconda3/envs/`中，直接在这里创建一个环境名的文件夹，比如`~/miniconda3/envs/new_env`，然后在这下面解压文件`my_env.tar.gz`,这就就直接得到了环境`new_env`
 ---
 
