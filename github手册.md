@@ -446,7 +446,7 @@ gh auth login
 
 # 退回到之前的版本之后，进行修改并提交分支
 
-这是**+1**的内容
+这是 **+1** 的内容
 
 ![image-20241121152842459](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121152842459.png)
 
