@@ -371,7 +371,7 @@ git push -u origin main # 推送本地代码到远程
 根据你的 Linux 发行版，选择对应的命令：
 
 #### **Debian/Ubuntu 系统**
-1. 添加 GitHub CLI 的软件源：
+1. 添加 GitHub CLI 的软件源(如果能直接安装，可以先不用添加源)：
    ```bash
    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
    sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
