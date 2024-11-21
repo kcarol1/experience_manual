@@ -220,3 +220,226 @@ git branch -r
 git fetch origin
 ```
 
+# 通过代码来创建仓库，不在网页上操作
+
+是的，你完全可以直接通过代码在本地或远程创建 Git 仓库，而无需登录到网页界面操作。以下是不同场景下的操作方法：
+
+---
+
+## **1. 在本地创建 Git 仓库**
+这是最简单的方式，仅需初始化一个本地仓库：
+
+```bash
+mkdir your_project_name    # 创建一个新的文件夹（可选）
+cd your_project_name       # 进入该文件夹
+git init                   # 初始化一个新的 Git 仓库
+```
+
+执行后，当前目录下会生成一个 `.git` 文件夹，表示这个目录已经成为一个 Git 仓库。
+
+---
+
+## **2. 创建远程仓库并连接本地仓库**
+如果你想直接在 GitHub、GitLab 等代码托管平台上创建一个远程仓库，可以通过工具或者 API 自动完成。
+
+### **方法 1：通过 GitHub CLI**
+1. 确保你[安装](# 安装GitHub CLI)了 [GitHub CLI](https://cli.github.com/) 并完成登录授权：
+   ```bash
+   gh auth login
+   ```
+
+2. 使用以下命令创建一个新的远程仓库：
+   ```bash
+   gh repo create your_repository_name --public
+   ```
+   或者创建私有仓库：
+   ```bash
+   gh repo create your_repository_name --private
+   ```
+
+3. 完成后，GitHub CLI 会自动初始化一个本地仓库，并将它与远程仓库连接。
+
+---
+
+### **方法 2：通过 GitHub API**
+如果你习惯用脚本操作，可以使用 GitHub 的 REST API 创建仓库。以下是一个简单的例子（需要 Personal Access Token）：
+
+#### **使用 `curl` 命令：**
+
+```bash
+curl -u "your_username:your_personal_access_token" \
+     -X POST https://api.github.com/user/repos \
+     -d '{"name": "your_repository_name", "private": false}'
+```
+
+- **`your_username`**: GitHub 用户名。
+- **`your_personal_access_token`**: 在 GitHub 设置中生成的 Token（需要 `repo` 权限）。
+- **`private: false`**: 表示创建一个公开仓库，设置为 `true` 可创建私有仓库。
+
+---
+
+### **方法 3：用 GitLab CLI（或 API）**
+类似于 GitHub 的操作，GitLab 也有自己的 CLI 工具 [GitLab CLI](https://gitlab.com/gitlab-org/cli)。可以用以下命令创建仓库：
+
+```bash
+glab repo create your_project_name --private
+```
+
+或者用 GitLab 的 REST API：
+
+```bash
+curl --header "PRIVATE-TOKEN: your_personal_access_token" \
+     --data "name=your_repository_name&visibility=private" \
+     https://gitlab.com/api/v4/projects
+```
+
+---
+
+## **3. 将本地仓库连接到远程仓库**
+如果你已经在本地创建了仓库并希望连接到远程仓库：
+
+```bash
+git remote add origin https://github.com/your_username/your_repository_name.git
+git branch -M main      # 设置默认分支为 main（可选）
+git push -u origin main # 推送本地代码到远程
+```
+
+---
+
+## 总结
+你完全可以用命令行工具和 API 来完成从本地到远程的整个仓库创建和配置流程，无需登录到网页操作。**推荐使用 GitHub CLI 或 GitLab CLI**，因为它们更简单直观
+
+# 安装GitHub CLI
+
+安装 **GitHub CLI (gh)** 工具因操作系统的不同而略有差异，以下是详细安装方法：
+
+---
+
+## **1. Windows**
+### 方法一：通过 `winget` 安装（推荐）
+1. 打开命令提示符或 PowerShell。
+2. 执行以下命令：
+   ```bash
+   winget install --id GitHub.cli
+   ```
+3. 验证安装：
+   ```bash
+   gh --version
+   ```
+
+### 方法二：通过官方安装包
+1. 下载官方安装程序：
+   - 前往 [GitHub CLI Releases 页面](https://github.com/cli/cli/releases)。
+   - 下载适用于 Windows 的 `.msi` 文件（例如 `gh_2.37.0_windows_amd64.msi`）。
+2. 运行安装程序并按提示完成安装。
+3. 验证安装：
+   ```bash
+   gh --version
+   ```
+
+---
+
+## **2. macOS**
+### 方法一：通过 Homebrew 安装（推荐）
+1. 确保 Homebrew 已安装。如果未安装，可以先执行以下命令安装：
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+2. 安装 GitHub CLI：
+   ```bash
+   brew install gh
+   ```
+3. 验证安装：
+   ```bash
+   gh --version
+   ```
+
+### 方法二：通过官方安装包
+1. 下载 macOS 的 `.pkg` 文件：
+   - 前往 [GitHub CLI Releases 页面](https://github.com/cli/cli/releases)。
+   - 下载适用于 macOS 的安装文件（例如 `gh_2.37.0_macOS_amd64.pkg`）。
+2. 双击文件并按照安装向导完成安装。
+3. 验证安装：
+   ```bash
+   gh --version
+   ```
+
+---
+
+## **3. Linux**
+### 方法一：通过包管理器安装（推荐）
+根据你的 Linux 发行版，选择对应的命令：
+
+#### **Debian/Ubuntu 系统**
+1. 添加 GitHub CLI 的软件源：
+   ```bash
+   curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+   sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+   echo "deb [signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+   ```
+2. 更新并安装：
+   ```bash
+   sudo apt update
+   sudo apt install gh
+   ```
+3. 验证安装：
+   ```bash
+   gh --version
+   ```
+
+#### **Fedora/RHEL 系统**
+1. 安装 GitHub CLI：
+   ```bash
+   sudo dnf install 'dnf-command(config-manager)' -y
+   sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+   sudo dnf install gh -y
+   ```
+2. 验证安装：
+   ```bash
+   gh --version
+   ```
+
+#### **Arch Linux 系统**
+如果你使用 Arch Linux 或基于它的发行版（如 Manjaro），可以从 AUR 安装：
+```bash
+yay -S github-cli
+```
+
+### 方法二：通过二进制文件安装
+1. 下载对应版本的二进制文件：
+   - 前往 [GitHub CLI Releases 页面](https://github.com/cli/cli/releases)。
+   - 找到适合你系统的压缩包（例如 `gh_2.37.0_linux_amd64.tar.gz`）。
+2. 解压缩文件：
+   ```bash
+   tar -xvf gh_2.37.0_linux_amd64.tar.gz
+   ```
+3. 将 `gh` 移动到可执行路径中：
+   ```bash
+   sudo mv gh_2.37.0_linux_amd64/bin/gh /usr/local/bin/
+   ```
+4. 验证安装：
+   ```bash
+   gh --version
+   ```
+
+---
+
+## **4. 验证安装成功**
+无论在哪个系统上安装完成后，都可以通过以下命令确认安装是否成功：
+```bash
+gh --version
+```
+
+如果输出类似以下内容，则安装成功：
+```bash
+gh version 2.x.x (2024-xx-xx)
+```
+
+---
+
+## **后续操作：登录 GitHub CLI**
+安装完成后，执行以下命令进行登录：
+```bash
+gh auth login
+```
+按提示选择 GitHub.com，选择协议（HTTPS 推荐），并完成身份验证。
