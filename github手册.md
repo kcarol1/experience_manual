@@ -443,3 +443,33 @@ gh version 2.x.x (2024-xx-xx)
 gh auth login
 ```
 按提示选择 GitHub.com，选择协议（HTTPS 推荐），并完成身份验证。
+
+# 退回到之前的版本之后，进行修改并提交分支
+
+这是**+1**的内容
+
+![image-20241121152842459](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121152842459.png)
+
+使用`git reset --hard`命令回到之前的版本，其他的版本并不会消失(条件是其他版本已经更新在远程了)，如图所示
+
+![image-20241121152712438](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121152712438.png)
+
+现在再从**开始**添加新内容
+
+![image-20241121153055873](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121153055873.png)
+
+然后，暂存、提交、上传
+
+![image-20241121153309685](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121153309685.png)
+
+此时就会遇到冲突
+
+![image-20241121153417588](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121153417588.png)
+
+手动选择保留哪一个就可以了，在这里直接选择**当前更改**
+
+![image-20241121153546174](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121153546174.png)
+
+然后暂存、提交、上传
+
+![image-20241121153705870](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121153705870.png)
