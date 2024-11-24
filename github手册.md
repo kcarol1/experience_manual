@@ -471,3 +471,56 @@ gh auth login
 然后暂存、提交、上传
 
 ![image-20241121153705870](https://cdn.jsdelivr.net/gh/xff133/wodetuhchuang/pic/image-20241121153705870.png)
+
+# git已经commit，但还没push，如何撤回这个commit
+
+如果你已经执行了 `git commit`，但还没有 `git push`，并且想撤回这个提交，可以使用以下几种方法，具体取决于你的需求：
+
+### 1. **撤回最近的 commit（保留更改）**
+
+如果你想撤回最近的提交，但保留工作目录中的更改（即让这些更改回到暂存区），可以使用以下命令：
+
+```bash
+git reset --soft HEAD~1
+```
+
+解释：
+- `HEAD~1`：表示最近的一次提交。
+- `--soft`：让 Git 保留更改到暂存区（staging area），即这些更改会被标记为已暂存，但不再是一个提交。
+
+如果你只是想撤销提交而不保留暂存区的更改，可以使用 `--mixed`：
+
+```bash
+git reset --mixed HEAD~1
+```
+
+### 2. **撤回最近的 commit（丢弃更改）**
+
+如果你想撤销最近的提交，并且**丢弃更改**（即不保留工作区的任何更改），可以使用：
+
+```bash
+git reset --hard HEAD~1
+```
+
+**注意：** 这个命令会丢失你的所有未提交的更改，因此需要小心使用。
+
+### 3. **撤回多个 commit**
+
+如果你想撤回多个提交，可以修改 `HEAD~1` 为你想撤回的提交数。例如，撤回最近的 3 次提交：
+
+```bash
+git reset --soft HEAD~3
+```
+
+或者，如果你想完全丢弃最近 3 次提交：
+
+```bash
+git reset --hard HEAD~3
+```
+
+### 总结：
+- **`git reset --soft HEAD~1`**：撤回提交，但保留更改到暂存区。
+- **`git reset --mixed HEAD~1`**：撤回提交，保留更改在工作区（不再暂存）。
+- **`git reset --hard HEAD~1`**：撤回提交，并且丢弃所有更改。
+
+确保在执行 `--hard` 选项时，了解这会丢失所有本地更改，无法恢复。

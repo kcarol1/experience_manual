@@ -2432,3 +2432,119 @@ pgrep -f train.py
 - 如果你的脚本运行得很快，可能在你查找 PID 前已经完成，可以使用 `sleep` 延长运行时间。
 - 如果运行多个相同脚本，需通过参数或环境变量区分它们。
 
+# grep命令用法
+
+`grep` 是 Linux 中用于搜索文件内容的强大工具，支持通过模式匹配查找文本。以下是 `grep` 命令的基本用法及常见选项：
+
+---
+
+### **基本语法**
+```bash
+grep [选项] "模式" 文件名
+```
+
+### **常用选项**
+1. **`-i`**：忽略大小写
+   ```bash
+   grep -i "hello" file.txt
+   ```
+   查找 `file.txt` 中所有包含 `hello`（大小写不限）的行。
+
+2. **`-n`**：显示匹配行的行号
+   ```bash
+   grep -n "error" file.log
+   ```
+   输出 `file.log` 中包含 `error` 的行及其行号。
+
+3. **`-v`**：反向匹配（显示不符合模式的行）
+   ```bash
+   grep -v "success" file.log
+   ```
+   显示 `file.log` 中不包含 `success` 的行。
+
+4. **`-r` 或 `-R`**：递归搜索目录
+   ```bash
+   grep -r "function" ./src
+   ```
+   在 `./src` 目录及其子目录中递归查找 `function`。
+
+5. **`-l`**：只输出匹配的文件名
+   ```bash
+   grep -l "TODO" *.c
+   ```
+   显示当前目录下所有 `.c` 文件中包含 `TODO` 的文件名。
+
+6. **`-c`**：统计匹配行的数量
+   ```bash
+   grep -c "error" file.log
+   ```
+   输出 `file.log` 中包含 `error` 的行数。
+
+7. **`-w`**：精确匹配整个单词
+   ```bash
+   grep -w "main" file.c
+   ```
+   匹配 `main`，而不会匹配 `mainly` 或 `domain`。
+
+8. **`-E`**：支持扩展正则表达式（等同于 `egrep`）
+   ```bash
+   grep -E "error|warning" file.log
+   ```
+   匹配 `error` 或 `warning`。
+
+9. **`-o`**：只输出匹配的部分
+   ```bash
+   grep -o "https://[a-zA-Z0-9./?=_-]*" file.txt
+   ```
+   从文件中提取所有 URL。
+
+10. **`--color`**：高亮显示匹配部分（多数情况下自动启用）
+    ```bash
+    grep --color "test" file.txt
+    ```
+
+---
+
+### **常见用法示例**
+
+1. **在文件中搜索字符串**
+   ```bash
+   grep "root" /etc/passwd
+   ```
+
+2. **递归搜索多个文件**
+   ```bash
+   grep -r "error" /var/log/
+   ```
+
+3. **结合管道符过滤命令输出**
+   ```bash
+   ps aux | grep "nginx"
+   ```
+
+4. **从日志中过滤关键词**
+   ```bash
+   tail -f /var/log/syslog | grep "error"
+   ```
+
+5. **查找多种模式**
+   ```bash
+   grep -E "error|fail" file.log
+   ```
+
+6. **使用正则匹配开始或结束的行**
+   - 匹配以 `error` 开头的行：
+     ```bash
+     grep "^error" file.log
+     ```
+   - 匹配以 `done` 结尾的行：
+     ```bash
+     grep "done$" file.log
+     ```
+
+---
+
+### **总结**
+- `grep` 是一个基础但强大的文本搜索工具，结合正则表达式可以完成复杂的文本过滤任务。
+- 当需要更复杂的功能时，可以结合 `awk` 或 `sed` 使用。
+
