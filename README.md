@@ -184,6 +184,8 @@
 
 在Linux中，你可以使用一些命令来查看当前正在运行的任务。其中最常用的是`top`命令。`top`命令可以显示系统中正在运行的进程以及相关的信息，例如进程ID、CPU使用率、内存使用情况等等。只需在终端中输入`top`并按下回车键即可查看。
 
+> 在输入top后，再按下u，就可以输入要显示用户的一些进程
+
 另外，你也可以使用`ps`命令来查看进程信息。例如，`ps aux`命令可以列出当前系统中所有进程的详细信息。这些信息包括进程ID（PID）、CPU使用率、内存使用情况等等。
 
 如果你想查看特定用户的进程，可以使用`ps -u username`命令，将`username`替换为你要查看的用户名。
@@ -2652,6 +2654,31 @@ find /路径 -type f -size +1M -size -10M
 - `-10M`：小于 10 MB 的文件。
 
 ------
+
+### 7. 使用`df -h`查看磁盘使用量
+
+```bash
+df -h
+```
+
+输出为：
+
+```bash
+文件系统        大小  已用  可用 已用% 挂载点
+tmpfs            13G  6.0M   13G    1% /run
+/dev/nvme0n1p2  468G  150G  295G   34% /
+tmpfs            63G  172M   63G    1% /dev/shm
+tmpfs           5.0M  4.0K  5.0M    1% /run/lock
+efivarfs        246K  155K   87K   65% /sys/firmware/efi/efivars
+/dev/nvme0n1p1  511M  6.1M  505M    2% /boot/efi
+/dev/sda1       3.6T  1.1T  2.4T   33% /exp
+tmpfs            13G  100K   13G    1% /run/user/1001
+tmpfs            13G  104K   13G    1% /run/user/1006
+tmpfs            13G   64K   13G    1% /run/user/1007
+tmpfs            13G  128K   13G    1% /run/user/1005
+```
+
+
 
 ### 总结
 
