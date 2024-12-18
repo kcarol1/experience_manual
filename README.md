@@ -681,7 +681,7 @@ unset https_proxy
 curl -I <url>
 ```
 
-设置系统代理
+设置系统代理（只会在当前终端生效）
 
 1. http和https
    ```bash
@@ -2687,3 +2687,476 @@ tmpfs            13G  128K   13G    1% /run/user/1005
 - **查看精确字节大小**：`stat` 或 `wc -c`
 
 根据需求选择合适的命令即可！
+
+# sudo权限
+
+## 修改sudo权限
+
+------
+
+#### 1. **将用户添加或删除 `sudo` 组**
+
+在 Ubuntu 中，`sudo` 权限默认由用户属于的 `sudo` 组来管理。
+
+##### 添加用户到 `sudo` 组
+
+1. 使用 
+
+   ```
+   usermod
+   ```
+
+    命令：
+
+   ```bash
+   sudo usermod -aG sudo 用户名
+   ```
+
+   例如：
+
+   ```bash
+   sudo usermod -aG sudo john
+   ```
+
+2. 确认修改生效：
+
+   - 用户需要重新登录，或者执行 `newgrp sudo` 来刷新组信息。
+
+   - 检查用户所属组：
+
+     ```bash
+     groups 用户名
+     ```
+
+##### 从 `sudo` 组中移除用户
+
+1. 使用 
+
+   ```
+   deluser
+   ```
+
+    命令：
+
+   ```bash
+   sudo deluser 用户名 sudo
+   ```
+
+   例如：
+
+   ```bash
+   sudo deluser john sudo
+   ```
+
+2. 同样需要用户重新登录生效。
+
+------
+
+#### 2. **编辑 `/etc/sudoers` 文件（推荐用 `visudo` 命令）**
+
+`/etc/sudoers` 是管理用户 `sudo` 权限的配置文件，直接修改此文件可能导致配置错误，建议使用 `visudo` 命令。
+
+##### 添加或修改用户的权限
+
+1. 打开 `sudoers` 文件：
+
+   ```bash
+   sudo visudo
+   ```
+
+2. 添加一行，指定用户的 `sudo` 权限：
+
+   ```bash
+   用户名 ALL=(ALL:ALL) ALL
+   ```
+
+   - `用户名`：需要授权的用户。
+   - `ALL`：表示可以在所有主机上执行任何命令。
+   - `(ALL:ALL)`：表示可以作为任何用户和组运行命令。
+   - 最后的 `ALL` 表示可以执行所有命令。
+
+   例如，给用户 `john` 添加 `sudo` 权限：
+
+   ```bash
+   john ALL=(ALL:ALL) ALL
+   ```
+
+3. **保存并退出**：
+
+   - 如果没有错误，保存修改即可生效。
+
+##### 移除用户的 `sudo` 权限
+
+1. 仍然使用 `visudo` 打开 `/etc/sudoers` 文件。
+
+2. 查找该用户的配置行，例如：
+
+   ```bash
+   john ALL=(ALL:ALL) ALL
+   ```
+
+   将其删除或注释掉（加 `#` 注释）。
+
+3. 保存文件。
+
+------
+
+#### 3. **使用 `sudoers.d` 目录进行管理（推荐方式）**
+
+为了更安全和模块化，可以在 `/etc/sudoers.d/` 目录下创建用户权限配置文件。
+
+##### 添加用户权限
+
+1. 使用编辑器创建一个新文件：
+
+   ```bash
+   sudo nano /etc/sudoers.d/用户名
+   ```
+
+   例如：
+
+   ```bash
+   sudo nano /etc/sudoers.d/john
+   ```
+
+2. 添加以下内容来赋予用户 `sudo` 权限：
+
+   ```bash
+   用户名 ALL=(ALL:ALL) ALL
+   ```
+
+   例如：
+
+   ```bash
+   john ALL=(ALL:ALL) ALL
+   ```
+
+3. 保存退出。
+
+##### 移除用户权限
+
+直接删除对应的配置文件：
+
+```bash
+sudo rm /etc/sudoers.d/用户名
+```
+
+------
+
+#### 4. **检查配置**
+
+无论使用哪种方式修改了用户权限，都可以用以下命令测试：
+
+```bash
+sudo -l -U 用户名
+```
+
+该命令会列出该用户的 `sudo` 权限。
+
+------
+
+### 注意事项
+
+1. 修改 `/etc/sudoers` 文件时，**一定要使用 `visudo` 命令**，因为它会进行语法检查，避免文件损坏导致无法使用 `sudo`。
+2. 小心授予权限，不要随意给未知用户 `sudo` 权限。
+
+这样就可以灵活管理用户的 `sudo` 权限了！
+
+## 重置su密码
+
+如果你忘记了 **`root`** 用户的密码（`su` 密码），但你拥有 **`sudo`** 权限，可以通过以下方法重置 `root` 密码：
+
+------
+
+### 1. **使用 `sudo` 直接重设 `root` 密码**
+
+既然你还有 **`sudo`** 权限，可以使用以下命令重设 `root` 用户的密码：
+
+在终端中输入：
+
+```bash
+sudo passwd root
+```
+
+系统会提示你输入新密码并再次确认：
+
+```plaintext
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+```
+
+这将直接重置 `root` 用户的密码。
+
+------
+
+### 2. **启用 `sudo su` 临时进入 root 用户**
+
+如果你想临时切换到 `root` 用户，而不需要知道其密码，可以执行：
+
+```bash
+sudo su
+```
+
+这样你会直接进入 `root` 环境，之后你也可以通过 `passwd` 命令重置密码。
+
+------
+
+### 3. **确保 `root` 用户被激活**
+
+有时，`root` 用户可能未启用（默认情况下在 Ubuntu 上被锁定）。你可以检查 `root` 的状态并启用它：
+
+- 先以 `sudo` 权限切换到 root：
+
+  ```bash
+  sudo passwd -u root
+  ```
+
+- 然后重置密码：
+
+  ```bash
+  sudo passwd root
+  ```
+
+------
+
+### 4. **恢复默认的 root 密码行为**
+
+如果你不想手动重设密码，而希望恢复到初始状态（锁定 `root` 用户），可以执行：
+
+```bash
+sudo passwd -l root
+```
+
+------
+
+### 5. **注意事项**
+
+- 一旦重置了 `root` 密码，请确保密码安全。
+- 如果不需要 `root` 用户密码，可以继续使用 `sudo` 命令进行管理员操作，Ubuntu 默认推荐这种方式。
+
+------
+
+### 设置修改密码的权限
+
+在 Linux 中，**`sudo` 权限** 的设计原则是灵活的，可以通过 **`sudoers` 配置文件** 实现精细控制，例如：**限制只有特定用户才能重置密码**。
+
+------
+
+### **实现步骤：指定用户才能重置密码**
+
+你需要编辑 `sudoers` 文件，通过 **`visudo`** 命令安全地配置规则。
+
+------
+
+#### **1. 打开 `sudoers` 文件**
+
+使用 `visudo` 命令以防止配置错误：
+
+```bash
+sudo visudo
+```
+
+------
+
+#### **2. 添加限制规则**
+
+在 `sudoers` 文件中添加以下规则，控制只有某个用户可以执行 `passwd` 命令。
+
+例如，假设只有用户 `kaeden` 能重置 `root` 密码：
+
+```plaintext
+kaeden ALL=(ALL) NOPASSWD: /usr/bin/passwd root
+```
+
+**解释**：
+
+- `kaeden`：指定用户。
+- `ALL=(ALL)`：允许在任何主机和身份下运行命令。
+- `NOPASSWD`：运行此命令时不需要再次输入密码。
+- `/usr/bin/passwd root`：允许此用户 **仅** 修改 `root` 用户的密码。
+
+------
+
+#### **3. 禁止其他用户执行 `passwd root`**
+
+在文件中，明确禁止其他用户重置 `root` 密码，例如：
+
+```plaintext
+%sudo ALL=(ALL) !/usr/bin/passwd root
+```
+
+**解释**：
+
+- `%sudo`：表示所有属于 `sudo` 用户组的用户。
+- `!`：表示禁止此命令。
+- `/usr/bin/passwd root`：禁止重置 `root` 用户密码。
+
+------
+
+#### 4.禁止其他用户通过修改sudoers来绕过权限
+
+在配置文件中添加以下
+
+```bash
+Cmnd_Alias SUDOEDIT = /usr/sbin/visudo, /etc/sudoers
+%sudo ALL=(ALL) !SUDOEDIT
+```
+
+同时请确保文件是安全的
+
+```bash
+chmod 440 /etc/sudoers
+chown root:root /etc/sudoers
+```
+
+
+
+### **最终效果**
+
+- 用户 `kaeden`
+
+   可以使用以下命令重置 
+
+  ```
+  root
+  ```
+
+   密码：
+
+  ```bash
+  sudo /usr/bin/passwd root
+  ```
+
+- **其他用户** 即使有 `sudo` 权限，也会被禁止重置 `root` 密码。
+
+------
+
+### **验证配置**
+
+1. 切换到其他拥有 `sudo` 权限的用户，尝试运行：
+
+   ```bash
+   sudo passwd root
+   ```
+
+2. 系统会返回权限拒绝错误。
+
+3. 切换到用户 `kaeden`，验证可以正常执行命令。
+
+------
+
+### **注意事项**
+
+1. **精确指定命令路径**：确保 `/usr/bin/passwd` 是正确的命令路径（使用 `which passwd` 确认）。
+2. **安全配置**：任何错误配置 `sudoers` 文件可能导致系统不可用，所以务必使用 `visudo` 进行编辑。
+
+------
+
+通过上述方法，你可以精确控制 **只有特定用户才能重置 `root` 密码**，有效地增强系统的安全性。
+
+## 一般示例
+
+```bash
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+a      ALL=(ALL:ALL) ALL
+b      ALL=(ALL:ALL) ALL
+c ALL=(ALL:ALL) ALL
+d ALL=(ALL:ALL) ALL
+# Members of the admin group may gain root privileges
+#%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+#sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "#include" directives:
+
+#includedir /etc/sudoers.d
+# 可以在/etc/sudoers.d单独为用户配置，以用户f为例
+# 它的配置文件在/etc/sudoers.d/f可以查看其示例，此处就不用再为f配置权限了
+
+
+# 禁止重置密码
+#--------------------------ban--------------------------------------#
+%sudo ALL=(ALL) !/usr/bin/passwd root
+c ALL=(ALL) !/usr/bin/visudo
+
+#--------------------------allow-------------------------------------#
+c ALL=(ALL) NOPASSWD: /usr/bin/passwd root
+
+# 禁止修改sudoers
+## ban
+Cmnd_Alias SUDOEDIT = /usr/sbin/visudo, /etc/sudoers
+%sudo ALL=(ALL) !SUDOEDIT
+## allow
+c ALL=(ALL) SUDOEDIT
+```
+
+# windows开启ssh服务
+
+1. 安装openssh server
+
+   在windows系统中安装**可选功能**`openssh server`
+
+   win11的安装方式：`系统`→`可选功能`→`添加功能`(搜索openssh)添加，**注意，要添加的是服务端的，不是客户端**
+
+2. 打开 **PowerShell（管理员模式）**，输入以下命令来启动 SSH 服务器
+
+   ```powershell
+   Start-Service sshd
+   ```
+
+   如果想开机启动sshd服务，则用下面的命令
+
+   ```powershell
+   Set-Service -Name sshd -StartupType 'Automatic'
+   ```
+
+   确保 Windows 防火墙允许 SSH 连接，**默认情况下安装 OpenSSH 服务器时，防火墙规则会自动添加**，但如果没有，可以手动添加
+
+   ```powershell
+   New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Protocol TCP -Action Allow -LocalPort 22
+   ```
+
+## 常见问题
+
+- 通过以上设置之后还是不能ssh连接上
+
+  编辑文件`C:\ProgramData\ssh\sshd_config`将其中的这一行
+
+  ```
+  #PasswordAuthentication yes
+  ```
+
+  前面的`#`去掉，即
+
+  ```
+  PasswordAuthentication yes
+  ```
+
+  如果没有说的这一行，就自己添加上去就可以了
+
+- 连接的用户名和密码是什么？
+
+  用户名可以用命令`whoami`进行查看，返回结果是你的用户名，例如：`DESKTOP-XXXXXX\your_username`，这里 `your_username` 就是你的用户名。
+
+  密码则是锁屏密码或者是你的微软账户密码
