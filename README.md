@@ -2172,7 +2172,7 @@ http://127.0.0.1:8080
 watch -n 0.5 nvidia-smi
 ```
 
-# 换源
+# pip换源
 
 ```bash
 # 清华
@@ -3320,7 +3320,7 @@ tmux source-file ~/.tmux.conf
   Ctrl+b + "%"（水平），Ctrl+b + "（垂直）
   ```
 
-# `$`的意义
+# Linux中`$`的意义
 
 当你看到 `$` 在 Shell 中出现时，它通常与 **变量替换** 或 **命令替换** 相关。
 
@@ -3364,3 +3364,143 @@ cd $(dirname $(which ranger))/..
 - 最终，`/..` 会将当前目录向上移动一级。
 
 所以，整个命令的效果是：**首先获取 `ranger` 的路径，找到它的所在目录，然后切换到该目录的上一层**。
+
+# 创建用户
+
+```bash
+useradd username
+```
+
+就可以创建用户了，但是不会创建相应的用户目录
+
+```bash
+useradd -m username
+```
+
+```bash
+sudo useradd -m -d [path_home] -g [groupname] -s /bin/bash [username]
+```
+
+这会在创建用户的同时在`home`目录下创建一个名为`uername`的用户目录
+
+```bash
+sudo userdel -r username
+```
+
+创建用户时指定目录，在创建时，用户和目录都不存在才有效
+
+```
+sudo useradd -m -d /path/to/directory username
+```
+
+```bash
+userdel -r 用户名
+```
+
+这会删除用户包括与他相关的文件
+
+```bash
+passwd username
+```
+
+为用户设置密码
+
+---
+
+有时候默认使用`shell`不是`bash`，你可以检查一下
+
+```bash
+echo $SHELL
+```
+
+如果显示的是 `/bin/sh`，你可以切换到 Bash：
+
+```bash
+chsh -s /bin/bash
+```
+
+重新登录后生效
+
+# 查看指定用户下的指定相关进程
+
+## 1. 查看指定用户的 MATLAB 进程
+
+使用 `ps` 或 `top` 查看指定用户的 MATLAB 进程。
+
+### 方法 1：使用 `ps`
+
+```bash
+ps -u <用户名> | grep MATLAB
+```
+
+这会列出该用户下所有与 MATLAB 相关的进程。
+
+### 方法 2：使用 `pgrep`
+
+```bash
+pgrep -u <用户名> -l MATLAB
+```
+
+`-u <用户名>` 指定用户，`-l` 列出进程名。这样可以更简洁地查找到 MATLAB 的进程
+
+## 2. 杀死 MATLAB 相关进程
+
+找到进程的 PID 后，可以使用以下命令来终止它们。
+
+### 杀死特定 PID 的进程
+
+```bash
+kill -9 <PID>
+```
+
+### 批量杀死与 MATLAB 相关的所有进程
+
+如果要批量结束所有与 MATLAB 相关的进程，可以结合 `pgrep` 和 `kill`：
+
+```bash
+pkill -u <用户名> MATLAB
+```
+
+或者手动：
+
+```bash
+pgrep -u <用户名> MATLAB | xargs kill -9
+```
+
+# 关于命令终端使用的bash
+
+在Linux系统中，默认终端通常是Bash终端。如果你当前使用的不是Bash，或者想将其切换到Bash，可以按照以下步骤操作：
+
+1. **确认Bash是否已安装**： 打开终端，输入以下命令确认Bash是否已安装：
+
+   ```bash
+   which bash
+   ```
+
+   如果输出路径（例如`/bin/bash`），则说明Bash已安装。
+
+2. **切换当前终端到Bash**： 你可以通过运行以下命令来切换到Bash终端：
+
+   ```bash
+   bash
+   ```
+
+   这样你就会进入到Bash终端会话。
+
+3. **更改默认的登录shell为Bash**： 如果你想将Bash设置为默认的登录shell，可以使用以下命令：
+
+   ```bash
+   chsh -s /bin/bash
+   ```
+
+   然后，重新启动终端或注销并重新登录，默认就会进入Bash终端。
+
+4. **检查是否已成功更改**： 你可以运行以下命令来确认当前使用的shell：
+
+   ```bash
+   echo $SHELL
+   ```
+
+   如果返回`/bin/bash`，则说明已成功切换为Bash。
+
+这样你就可以将终端切换到Bash了。
